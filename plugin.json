@@ -1,0 +1,21 @@
+{
+    "version": "0.1.0",
+    "pluginName": "snippet",
+    "description": "snippet",
+    "author": "bitranger",
+    "homepage": "https://github.com/bit-ranger/utools-snippet",
+    "preload": "preload.js",
+    "logo": "logo.png",
+    "features": [
+        {
+            "platform": [
+                "darwin",
+                "win32",
+                "linux"
+            ],
+            "code": "search_snippet",
+            "explain": "search snippet",
+            "cmds": ["snippet"]
+        }
+    ]
+}

@@ -2,7 +2,7 @@
     "version": "0.1.0",
     "pluginName": "snippet",
     "description": "snippet",
-    "author": "bitranger",
+    "author": "bit-ranger",
     "homepage": "https://github.com/bit-ranger/utools-snippet",
     "preload": "preload.js",
     "logo": "logo.png",

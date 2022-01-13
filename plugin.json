@@ -13,9 +13,19 @@
                 "win32",
                 "linux"
             ],
-            "code": "search_snippet",
-            "explain": "search snippet",
+            "code": "snippet_search",
+            "explain": "snippet search",
             "cmds": ["snippet"]
+        },
+        {
+            "platform": [
+                "darwin",
+                "win32",
+                "linux"
+            ],
+            "code": "snippet_setting",
+            "explain": "snippet setting",
+            "cmds": ["setting"]
         }
     ]
 }

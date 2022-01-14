@@ -7,10 +7,10 @@ const path = require("path")
 ctlKey = utools.isMacOs() ? 'command' : 'control'
 
 
-let getSleepCodeByShell = ms => {
+let toSleepShellCode = ms => {
     var cmd, tempFilePath
     if (utools.isWindows()) {
-        tempFilePath = getQuickcommandTempFile('vbs')
+        tempFilePath = getShellTempFile('vbs')
         cmd = `echo set ws=CreateObject("Wscript.Shell") > ${tempFilePath} && echo Wscript.sleep ${ms} >> ${tempFilePath} && cscript /nologo ${tempFilePath}`
     } else {
         cmd = `sleep ${ms / 1000}`
@@ -19,10 +19,9 @@ let getSleepCodeByShell = ms => {
 }
 
 
-getQuickcommandTempFile = ext => {
-    return path.join(os.tmpdir(), `quickcommandTempFile.${ext}`)
+getShellTempFile = ext => {
+    return path.join(os.tmpdir(), `snippetShellTemp.${ext}`)
 }
-
 
 
 let func = {
@@ -52,7 +51,7 @@ let func = {
         var start = new Date().getTime()
         try {
             // node 16.13.1
-            child_process.execSync(getSleepCodeByShell(ms), {timeout: ms, windowsHide: true})
+            child_process.execSync(toSleepShellCode(ms), {timeout: ms, windowsHide: true})
         } catch (ex) {
         }
         var end = new Date().getTime()

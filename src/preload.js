@@ -70,7 +70,7 @@ window.exports = {
                 let mdPath = utools.dbStorage.getItem('markdown_path');
                 if (!mdPath) {
                     callbackSetList([{
-                        title: "please set markdown path"
+                        title: "Please set markdown path"
                     }])
                     return;
                 }
@@ -80,7 +80,7 @@ window.exports = {
                     raw = fs.readFileSync(mdPath, 'utf8');
                 } catch (e) {
                     callbackSetList([{
-                        title: "invalid markdown path",
+                        title: "Not a valid markdown path",
                         description: mdPath
                     }])
                     return;
@@ -133,8 +133,13 @@ window.exports = {
 
                 document.addEventListener('keydown', event => {
                     if (event.keyCode === 13) {
-                        utools.dbStorage.setItem('markdown_path', subInput);
-                        utools.hideMainWindow()
+                        try {
+                            fs.readFileSync(subInput, 'utf8');
+                            utools.dbStorage.setItem('markdown_path', subInput);
+                            utools.hideMainWindow();
+                        } catch (e) {
+                            utools.showNotification("Not a valid markdown path");
+                        }
                     }
                 });
 

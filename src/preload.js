@@ -74,6 +74,7 @@ window.exports = {
                         properties: ['openFile']
                     });
                     if (!choice){
+                        utools.hideMainWindow();
                         return;
                     }
                     mdPath = choice[0]
@@ -144,6 +145,7 @@ window.exports = {
                     properties: ['openFile']
                 });
                 if (!choice){
+                    utools.hideMainWindow();
                     return;
                 }
                 let mdPath = choice[0]

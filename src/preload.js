@@ -151,7 +151,7 @@ window.exports = {
                                     description: subInput
                                 },
                                 {
-                                    description: "" + e
+                                    description: e.toString()
                                 }
                             ])
                         }

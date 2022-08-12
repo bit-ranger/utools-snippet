@@ -83,10 +83,15 @@ window.exports = {
                 try {
                     raw = fs.readFileSync(mdPath, { encoding: 'utf8' });
                 } catch (e) {
-                    callbackSetList([{
-                        title: "Failed to read file, is it utf-8 encoding ?" + e,
-                        description: mdPath
-                    }])
+                    callbackSetList([
+                        {
+                            title: "Failed to read file",
+                            description: mdPath
+                        },
+                        {
+                            description: e.toString()
+                        }
+                    ])
                     return;
                 }
 
@@ -133,31 +138,32 @@ window.exports = {
         mode: 'list',
         args: {
             enter: (action, callbackSetList) => {
-                let subInput = "";
-                utools.setSubInput(({text}) => {
-                    subInput = text;
-                }, "Markdown file path");
 
-                document.addEventListener('keydown', event => {
-                    if (event.keyCode === 13) {
-                        try {
-                            fs.readFileSync(subInput, {encoding: 'utf8'});
-                            utools.dbStorage.setItem('markdown_path', subInput);
-                            utools.hideMainWindow();
-                        } catch (e) {
-                            callbackSetList([
-                                {
-                                    title: "Failed to read file, is it utf-8 encoding ?",
-                                    description: subInput
-                                },
-                                {
-                                    description: e.toString()
-                                }
-                            ])
-                        }
-                    }
+                let choice = utools.showOpenDialog({
+                    filters: [{ 'name': 'snippet', extensions: ['md'] }],
+                    properties: ['openFile']
                 });
+                if (!choice){
+                    return;
+                }
+                let mdPath = choice[0]
+                try {
+                    fs.readFileSync(mdPath, {encoding: 'utf8'});
+                } catch (e) {
+                    callbackSetList([
+                        {
+                            title: "Failed to read file",
+                            description: mdPath
+                        },
+                        {
+                            description: e.toString()
+                        }
+                    ])
+                    return;
+                }
 
+                utools.dbStorage.setItem('markdown_path', mdPath);
+                utools.hideMainWindow();
             }
         }
     }

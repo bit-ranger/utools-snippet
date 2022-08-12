@@ -69,22 +69,29 @@ window.exports = {
             enter: (action, callbackSetList) => {
                 let mdPath = utools.dbStorage.getItem('markdown_path');
                 if (!mdPath) {
-                    callbackSetList([{
-                        title: "Please set markdown path"
-                    }])
-                    return;
+                    let choice = utools.showOpenDialog({
+                        filters: [{ 'name': 'snippet', extensions: ['md'] }],
+                        properties: ['openFile']
+                    });
+                    if (!choice){
+                        return;
+                    }
+                    mdPath = choice[0]
                 }
 
                 let raw = "";
                 try {
-                    raw = fs.readFileSync(mdPath, 'utf8');
+                    raw = fs.readFileSync(mdPath, { encoding: 'utf8' });
                 } catch (e) {
                     callbackSetList([{
-                        title: "Not a valid markdown path",
+                        title: "Failed to read file, is it utf-8 encoding ?" + e,
                         description: mdPath
                     }])
                     return;
                 }
+
+                utools.dbStorage.setItem('markdown_path', mdPath);
+
                 let blocks = raw.split(/#\s/)
                     .filter(i => i.trim() !== "");
 
@@ -123,27 +130,35 @@ window.exports = {
         }
     },
     'snippet_setting': {
-        mode: 'none',
+        mode: 'list',
         args: {
-            enter: (action) => {
+            enter: (action, callbackSetList) => {
                 let subInput = "";
                 utools.setSubInput(({text}) => {
                     subInput = text;
-                }, "markdown path");
+                }, "Markdown file path");
 
                 document.addEventListener('keydown', event => {
                     if (event.keyCode === 13) {
                         try {
-                            fs.readFileSync(subInput, 'utf8');
+                            fs.readFileSync(subInput, {encoding: 'utf8'});
                             utools.dbStorage.setItem('markdown_path', subInput);
                             utools.hideMainWindow();
                         } catch (e) {
-                            utools.showNotification("Not a valid markdown path");
+                            callbackSetList([
+                                {
+                                    title: "Failed to read file, is it utf-8 encoding ?",
+                                    description: subInput
+                                },
+                                {
+                                    description: "" + e
+                                }
+                            ])
                         }
                     }
                 });
 
-            },
+            }
         }
     }
 }
